@@ -31,8 +31,6 @@ class Maaster(object):
                 mapping[key] = type.create(**create)
             except bones.CallError:
                 print('err, already exists')
-                vlan = self.client.vlans.get(fabric=11, vid=0)
-                print(vlan.mtu)
 
         return mapping
 
@@ -88,7 +86,7 @@ class Maaster(object):
                 defaults={'fabric': fabric})
             for vlan_name, subnets in dirty_subnets.items():
                 vlan = vlans[vlan_name]
-                clean_subnets, dirty_ranges = self.partition_children(
+                clean_subnets, ranges = self.partition_children(
                     subnets, 'reserved')
                 subnets = self.__upload(
                     self.client.subnets, clean_subnets, key_facet='cidr',
@@ -98,10 +96,7 @@ class Maaster(object):
 def args():
     parser = ArgumentParser()
     parser.add_argument('--url', help='url of the maas api endpoint')
-    auth = parser.add_argument_group('authentication')
-    auth.add_argument('--username', help='MAAS username')
-    auth.add_argument('--password', help='MAAS password')
-    auth.add_argument('--apikey', help='MAAS apikey')
+    parser.add_argument('--apikey', help='MAAS apikey')
     commands = parser.add_subparsers(title='command')
     pull = commands.add_parser('pull')
     pull.add_argument('file', type=FileType('wb'),
