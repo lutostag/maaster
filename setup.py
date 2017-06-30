@@ -8,4 +8,5 @@ setup(name='MAASter',
       author='Greg Lutostanski',
       author_email='gregory.lutostanski@canonical.com',
       packages=['maaster'],
+      scripts=['maaster/maaster']
 )
